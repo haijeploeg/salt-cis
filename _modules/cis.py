@@ -20,6 +20,14 @@ def __virtual__():
 
 
 def audit(level=1, kind='server'):
+    '''
+    Audits the machine based on the input level en kind. Defaults to server level 1.
+
+    CLI Example:
+    .. code-block:: bash
+
+        salt '*' cis.audit level=2 kind=server
+    '''
     minion_id = __salt__['grains.get']('id')
     os = __salt__['grains.get']('os')
     osmajorrelease = __salt__['grains.get']('osmajorrelease')
