@@ -8,9 +8,12 @@ A module to CIS benchmark/audit your machines using SaltStack.
 '''
 from __future__ import absolute_import, print_function, unicode_literals
 
+import logging
+
 # Import salt libs
 import salt
 
+log = logging.getLogger(__name__)
 
 # Define the module's virtual name
 __virtualname__ = 'cis'
