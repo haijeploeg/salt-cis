@@ -6,12 +6,13 @@ A module to CIS benchmark/audit your machines using SaltStack.
 :maturity:      new
 :platform:      rhel,debian
 '''
+# Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
-
 import logging
 
 # Import salt libs
 import salt
+
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +39,15 @@ def audit(level=1, kind='server'):
     Audits the machine based on the input level en kind. Defaults to server
     level 1.
 
+    level
+        CIS level to score
+
+    kind
+        choose between workstation and server
+
+
     CLI Example:
+
     .. code-block:: bash
 
         salt '*' cis.audit level=2 kind=server
