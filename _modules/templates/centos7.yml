@@ -1,0 +1,17 @@
+metadata:
+  os: centos
+  osmajorrelease: 7
+
+  benchmark:
+    command:
+      1_1_1_1_cramfs:
+        cmd:
+          - modprobe -n -v cramfs | grep "install /bin/false"
+          - lsmod | grep cramfs
+        retcode: 1
+        level:
+          - 1
+          - 2
+        kind:
+          - workstation
+          - server

@@ -9,6 +9,7 @@ A module to CIS benchmark/audit your machines using SaltStack.
 # Import Python libs
 from __future__ import absolute_import, print_function, unicode_literals
 import logging
+import pkg_resources
 
 # Import salt libs
 import salt
@@ -24,14 +25,24 @@ def __virtual__():
     '''
     Confine this module to Debian and RHEL based systems
     '''
-    try:
-        os_family == __grains__['os_family'].lower()
+    if __grains__['os_family'].lower() in ['redhat', 'debian']:
+        return __virtualname__
 
-        if 'redhat' == os_family or 'debian' == os_family:
-            return __virtualname__
-        return(False, "Module cis: no RHEL or Debian based system detected")
-    except Exception:
-        return(False, "Module cis: no RHEL or Debian based system detected")
+    return(False, "Module cis: no RHEL or Debian based system detected")
+
+
+def _parse_yaml(os, osmajorrelease):
+    yaml = os + osmajorrelease
+    template_file = pkg_resources.resource_filename(__name__, 'templates/centos7.yml')
+    print(template_file)
+
+
+def _get_os():
+    return(__grains__['os'].lower())
+
+
+def _get_osmajorrelease():
+    return(__grains__['osmajorrelease'].lower())
 
 
 def audit(level=1, kind='server'):
@@ -52,6 +63,8 @@ def audit(level=1, kind='server'):
 
         salt '*' cis.audit level=2 kind=server
     '''
-    minion_id = __salt__['grains.get']('id')
-
-    return(minion_id, level, kind)
+    client = salt.client.Caller()
+    os = _get_os()
+    osmajorrelease = _get_osmajorrelease()
+    _parse_yaml(os, osmajorrelease)
+    return(client.cmd('cmd.run', ['whoami']))
